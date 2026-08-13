@@ -1,0 +1,68 @@
+services:
+
+  app:
+    build: .
+    container_name: devops-dashboard-app
+
+    restart: always
+    
+    depends_on:
+      database:
+        condition: service_healthy
+    environment:
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME}
+
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "import urllib.request; urllib.request.urlopen('http://localhost:5000/health')"
+      interval: 10s
+      timeout: 3s
+      retries: 3
+      start_period: 10s
+
+      
+
+  nginx:
+    image: nginx:latest
+    container_name: devops-dashboard-nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      app:
+        condition: service_healthy
+
+  database:
+    image: postgres:16
+    container_name: devops-dashboard-db
+    restart: always
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    healthcheck:
+      test:
+        - CMD
+        - pg_isready
+        - -U
+        - ${DB_USER}
+        - -d
+        - ${DB_NAME}
+      interval: 10s
+      timeout: 3s
+      retries: 3
+      start_period: 10s
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+volumes:
+  postgres-data:

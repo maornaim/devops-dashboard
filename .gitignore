@@ -1,0 +1,4 @@
+.env
+.skill-build/
+__pycache__/
+*.pyc
