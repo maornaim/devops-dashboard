@@ -1,3 +1,5 @@
+import os
+
 from flask import Flask, render_template, request, jsonify
 from database import get_connection
 from psycopg2.errors import UniqueViolation
@@ -7,7 +9,8 @@ app = Flask(__name__)
 
 @app.route("/")
 def home():
-    return render_template("index.html")
+    environment = os.getenv("APP_ENV") or "Development"
+    return render_template("index.html", environment=environment)
 
 
 @app.route("/health")
