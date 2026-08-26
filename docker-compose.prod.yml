@@ -3,7 +3,7 @@ services:
   app:
     image: ghcr.io/maornaim/devops-dashboard:${APP_IMAGE_TAG}
     container_name: devops-dashboard-app
-    restart: always
+    restart: unless-stopped
 
     depends_on:
       database:
@@ -31,6 +31,7 @@ services:
   nginx:
     image: nginx:latest
     container_name: devops-dashboard-nginx
+    restart: unless-stopped
     ports:
       - "80:80"
     volumes:
@@ -42,7 +43,7 @@ services:
   database:
     image: postgres:16
     container_name: devops-dashboard-db
-    restart: always
+    restart: unless-stopped
 
     environment:
       POSTGRES_USER: ${DB_USER}
