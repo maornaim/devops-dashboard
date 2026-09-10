@@ -39,6 +39,13 @@ services:
     depends_on:
       app:
         condition: service_healthy
+    logging:
+      driver: awslogs
+      options:
+        awslogs-region: eu-north-1
+        awslogs-group: /devops-dashboard/nginx
+        awslogs-stream: nginx
+        awslogs-create-group: "true"
 
   database:
     image: postgres:16
