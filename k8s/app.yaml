@@ -3,7 +3,7 @@ kind: ConfigMap
 metadata:
   name: app-config
 data:
-  APP_ENV: Kubernetes local
+  APP_ENV: Kubernetes GitOps test
   DB_HOST: postgres-service
   DB_PORT: "5432"
   DB_NAME: appdb
