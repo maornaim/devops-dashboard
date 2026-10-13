@@ -2,3 +2,13 @@
 .skill-build/
 __pycache__/
 *.pyc
+
+# Terraform local data and sensitive/generated files
+.terraform/
+*.tfstate
+*.tfstate.*
+.terraform.tfstate.lock.info
+*.tfplan
+*.tfvars
+crash.log
+k8s/*.local.yaml
